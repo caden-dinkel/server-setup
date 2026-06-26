@@ -21,10 +21,13 @@
     };
 
     deploy.nodes.omen01 = {
-        hostname = "omen01";
+        hostname = "192.168.1.232";
         profiles.system = {
+            sshUser = "caden";
+            interactiveSudo = true;
             user = "root";
             path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.omen01;
+            remoteBuild = true;
         };
     };
 
