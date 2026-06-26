@@ -30,8 +30,13 @@
             remoteBuild = true;
         };
     };
-
-    checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
+  checks =
+      if pkgs.stdenv.isLinux then
+    builtins.mapAttrs
+      (system: deployLib: deployLib.deployChecks self.deploy)
+      deploy-rs.lib
+    else
+      {};
   };
 }
 
