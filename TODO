@@ -1,0 +1,63 @@
+# server-setup TODO
+
+Goal: flake with reusable `nixosModules.base` and per-host configs under `hosts/<name>/`, deployable across a growing fleet via deploy-rs. k3s, tailscale, and other orchestration come **after** the multi-host config workflow is solid.
+
+## Decisions (locked in)
+
+| Topic | Decision |
+|-------|----------|
+| Fleet | omen01 is the first host; more machines will follow |
+| Users | `users.users.caden` in `base.nix` — shared across all hosts |
+| SSH keys | Same authorized keys on every host (in `base.nix`) |
+| Hostname | `omen01` |
+| Channel | `nixos-unstable` |
+| v1 scope | `base` module + `omen01` host only (no k3s/tailscale yet) |
+| Deploy | deploy-rs (remote rebuild/switch from this repo) |
+| Orchestration | Deferred until fleet config management is working |
+
+---
+
+## Milestone 1: Working flake (base + omen01) — done
+
+- [x] `flake.nix`: `nixosModules.base`, `nixosConfigurations.omen01`, `nixos-unstable`
+- [x] Module order: `hardware-configuration.nix` → `base` → `default.nix`
+- [x] Split host-specific config into `hosts/omen01/default.nix`
+- [x] Shared config in `modules/base.nix` (NetworkManager, openssh, logind, user caden)
+- [x] `hardware-configuration.nix` module header (was already fixed)
+- [x] `nix flake check` passes
+- [x] `nix build .#nixosConfigurations.omen01.config.system.build.toplevel --dry-run` passes
+
+**Still to verify on the live machine:**
+- [ ] GPU drivers (add to `default.nix` when tested)
+- [ ] `/storage` mount works as expected after switch
+
+---
+
+## Milestone 2: deploy-rs
+
+- [ ] Add `deploy-rs` flake input
+- [ ] Create deploy config (e.g. `deploy.nix` or inline in flake) targeting `omen01`
+- [ ] Configure SSH host/user for deploy (likely `caden@omen01` or Tailscale hostname later)
+- [ ] Set up deploy-rs secrets pattern if needed (avoid committing deploy keys/passwords)
+- [ ] First deploy: `deploy .#omen01` (or equivalent) — build remote, switch
+- [ ] Verify SSH, NetworkManager, hostname, and `/storage` after switch
+
+---
+
+## Milestone 3: Multi-host fleet pattern
+
+- [ ] Document host naming convention (`omen01`, `node02`, …)
+- [ ] Add skeleton for second host (`hosts/<name>/default.nix` + `hardware-configuration.nix`)
+- [ ] Confirm `base.nix` stays generic — only add to base what truly applies to every machine
+- [ ] Per-host differences live only under `hosts/<name>/`
+- [ ] Optional: shared `hosts/common.nix` if multiple hosts share non-base settings (only if duplication appears)
+
+---
+
+## Later (explicitly out of v1 scope)
+
+- [ ] `modules/tailscale.nix`
+- [ ] `modules/k3s-server.nix` / `modules/k3s-agent.nix`
+- [ ] Pin nixpkgs to stable channel
+- [ ] `.gitignore` for secrets/local overrides
+- [ ] README with deploy workflow (if desired)
