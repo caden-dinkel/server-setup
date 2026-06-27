@@ -13,6 +13,7 @@
     };
 
     nixosConfigurations.omen01 = nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
       modules = [
         ./hosts/omen01/hardware-configuration.nix
         self.nixosModules.base
@@ -30,11 +31,6 @@
             remoteBuild = true;
         };
     };
-    checks =
-  if builtins.currentSystem == "x86_64-linux" then
-    deploy-rs.lib.x86_64-linux.deployChecks self.deploy
-  else
-    {};
   };
 }
 
