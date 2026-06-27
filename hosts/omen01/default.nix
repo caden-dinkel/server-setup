@@ -1,5 +1,4 @@
-{ ... }:
-
+{ pkgs, config, libs, ... }:
 {
   networking.hostName = "omen01";
 
