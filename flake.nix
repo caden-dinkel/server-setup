@@ -12,22 +12,22 @@
       base = ./modules/base.nix;
     };
 
-    nixosConfigurations.omen01 = nixpkgs.lib.nixosSystem {
+    nixosConfigurations.omen = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
-        ./hosts/omen01/hardware-configuration.nix
+        ./hosts/omen/hardware-configuration.nix
         self.nixosModules.base
-        ./hosts/omen01/default.nix
+        ./hosts/omen/default.nix
       ];
     };
 
-    deploy.nodes.omen01 = {
+    deploy.nodes.omen = {
         hostname = "192.168.1.232";
         profiles.system = {
             sshUser = "caden";
             interactiveSudo = true;
             user = "root";
-            path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.omen01;
+            path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.omen;
             remoteBuild = true;
         };
     };

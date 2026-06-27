@@ -1,6 +1,6 @@
 { pkgs, config, lib, ... }:
 {
-  networking.hostName = "omen01";
+  networking.hostName = "omen";
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -15,8 +15,7 @@
   hardware.nvidia = {
     modesetting.enable = true;
     open = false;
-    package = config.boot.kernelPackages.nvidiaPackages.production;
-
+    package = config.boot.kernelPackages.nvidiaPackages.legacy_580;
     prime = {
       offload = {
         enable = true;
