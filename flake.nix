@@ -42,7 +42,7 @@
     };
 
     deploy.nodes.rog01 = {
-        hostName = "192.168.1.182";
+        hostname = "192.168.1.182";
         profiles.system = {
             sshUser = "caden";
             interactiveSudo = true;
