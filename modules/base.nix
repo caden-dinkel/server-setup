@@ -14,6 +14,12 @@
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIeXz6ax83OTBxo7t1XURFFJRwnxyc5ieErtqupaux7M mac@cdink.dev"
     ];
   };
+  security.sudo.extraRules = [
+    {
+      users = [ "caden" ];
+      commands = [ { command = "ALL"; options = [ "NOPASSWD" ]; } ];
+    }
+  ];
 
   services.logind.settings.Login = {
     HandleLidSwitch = "lock";

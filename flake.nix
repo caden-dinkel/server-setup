@@ -45,7 +45,6 @@
         hostname = "192.168.1.182";
         profiles.system = {
             sshUser = "caden";
-            interactiveSudo = true;
             user = "root";
             path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.rog01;
             remoteBuild = true;
