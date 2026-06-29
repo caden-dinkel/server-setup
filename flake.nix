@@ -21,15 +21,6 @@
       ];
     };
 
-    nixosConfigurations.rog01 = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        modules = [
-            ./hosts/rog/hardware-configuration.nix
-            ./hosts/rog/default.nix
-            self.nixosModules.base
-        ];
-    };
-
     deploy.nodes.omen = {
         hostname = "192.168.1.232";
         profiles.system = {
@@ -39,6 +30,15 @@
             path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.omen;
             remoteBuild = true;
         };
+    };
+
+    nixosConfigurations.rog01 = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+            ./hosts/rog/hardware-configuration.nix
+            ./hosts/rog/default.nix
+            self.nixosModules.base
+        ];
     };
 
     deploy.nodes.rog01 = {
@@ -51,6 +51,10 @@
             remoteBuild = true;
         };
     };
+
+
+
+
   };
 }
 
